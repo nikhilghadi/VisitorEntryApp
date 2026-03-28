@@ -1,29 +1,30 @@
 {
   "expo": {
-    "name": "regEntry",
+    "name": "RegEntry",
     "slug": "regEntry",
+    "scheme": "regentry",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "com.regentry.app",
+      "googleServicesFile": "./google-services.json"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.regentry.app",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+    "plugins": [
+      "expo-web-browser",
+      "@react-native-google-signin/google-signin"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "55ab2c18-8e65-4874-b551-138277adad79"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }
