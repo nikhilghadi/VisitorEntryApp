@@ -19,7 +19,26 @@
     },
     "plugins": [
       "expo-web-browser",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "RegEntry needs camera access to capture visitor photos."
+        }
+      ],
+       [
+      "expo-location",
+        {
+          "locationWhenInUsePermission": "RegEntry needs location access to verify you are at the society premises."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#1D9E75"
+        }
+      ]
     ],
     "extra": {
       "eas": {

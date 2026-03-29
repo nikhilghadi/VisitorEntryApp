@@ -7,7 +7,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import GuardHomeScreen from '../screens/guard/GuardHomeScreen';
 import ResidentHomeScreen from '../screens/resident/ResidentHomeScreen';
 import AdminHomeScreen from '../screens/admin/AdminHomeScreen';
-
+import NewVisitorScreen from '../screens/guard/NewVisitorScreen';
 // placeholder screens — we will build these next
 import PlaceholderScreen from '../screens/PlaceholderScreen';
 
@@ -17,7 +17,9 @@ function GuardStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="GuardHome" component={GuardHomeScreen} />
+      <Stack.Screen name="NewVisitor" component={NewVisitorScreen} />
       <Stack.Screen name="TodaysVisits" component={PlaceholderScreen} />
+      <Stack.Screen name="VisitorDetail" component={PlaceholderScreen} />
     </Stack.Navigator>
   );
 }
