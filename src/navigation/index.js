@@ -11,7 +11,7 @@ import NewVisitorScreen from '../screens/guard/NewVisitorScreen';
 // placeholder screens — we will build these next
 import PlaceholderScreen from '../screens/PlaceholderScreen';
 import VisitorDetailScreen from '../screens/guard/VisitorDetailScreen';
-
+import TodaysVisitsScreen from '../screens/guard/TodaysVisitsScreen';
 const Stack = createStackNavigator();
 
 function GuardStack() {
@@ -19,9 +19,8 @@ function GuardStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="GuardHome" component={GuardHomeScreen} />
       <Stack.Screen name="NewVisitor" component={NewVisitorScreen} />
-      <Stack.Screen name="TodaysVisits" component={PlaceholderScreen} />
+      <Stack.Screen name="TodaysVisits" component={TodaysVisitsScreen} />
       <Stack.Screen name="VisitorDetail" component={VisitorDetailScreen} />
-      {/* <Stack.Screen name="VisitorDetail" component={PlaceholderScreen} /> */}
     </Stack.Navigator>
   );
 }
