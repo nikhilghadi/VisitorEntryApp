@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Image,
+  Alert,
 } from 'react-native';
 import {
   collection,
@@ -69,7 +70,13 @@ export default function GuardHomeScreen({ navigation }) {
         status: 'exited',
         exit_time: serverTimestamp(),
         updated_at: serverTimestamp(),
+        exit_marked_by: doc(db, 'users', userProfile.id),
       });
+      Alert.alert(
+        'Exit marked',
+        'The visitor has been marked as exited.',
+        [{ text: 'OK' }]
+      );
     } catch (error) {
       console.log('Mark exit error:', error);
     }
@@ -138,7 +145,7 @@ export default function GuardHomeScreen({ navigation }) {
             onPress={() => handleMarkExit(item.id)}
             activeOpacity={0.8}
           >
-            <Text style={styles.exitButtonText}>Mark{'\n'}exit</Text>
+            <Text style={styles.exitButtonText}>Mark as {'\n'}exit</Text>
           </TouchableOpacity>
         ) : (
           <View style={styles.cardRight}>

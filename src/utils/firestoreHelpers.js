@@ -2,7 +2,6 @@
 // Reference object or a plain string — use this everywhere
 // you read reference fields from userProfile or any document
 export const getRefId = (field) => {
-  console.log(field)
   if (!field) return null;
   if (typeof field === 'string') return field;
   if (field?.id) return field.id; // Firestore DocumentReference
