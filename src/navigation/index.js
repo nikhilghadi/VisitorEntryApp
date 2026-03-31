@@ -10,7 +10,7 @@ import AdminHomeScreen from '../screens/admin/AdminHomeScreen';
 import NewVisitorScreen from '../screens/guard/NewVisitorScreen';
 // placeholder screens — we will build these next
 import PlaceholderScreen from '../screens/PlaceholderScreen';
-import VisitorDetailScreen from '../screens/guard/VisitorDetailScreen';
+import VisitorDetailScreen from '../screens/shared/VisitorDetailScreen';
 import TodaysVisitsScreen from '../screens/guard/TodaysVisitsScreen';
 const Stack = createStackNavigator();
 
@@ -29,6 +29,7 @@ function ResidentStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ResidentHome" component={ResidentHomeScreen} />
+      <Stack.Screen name="VisitorDetail" component={VisitorDetailScreen} />
       <Stack.Screen name="PastVisits" component={PlaceholderScreen} />
       <Stack.Screen name="FamilyMembers" component={PlaceholderScreen} />
     </Stack.Navigator>
