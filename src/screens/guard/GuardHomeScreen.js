@@ -34,7 +34,7 @@ export default function GuardHomeScreen({ navigation }) {
 
     // real-time listener for active visitors in this society
     const visitorsQuery = query(
-      collection(db, 'visitors'),
+      collection(db, 'visits'),
       where('society_id', '==', doc(db, 'societies', userProfile.society_id)),
       where('status', 'in', ['pending', 'approved', 'active'])
     );
@@ -64,9 +64,9 @@ export default function GuardHomeScreen({ navigation }) {
     return () => unsubscribe();
   }, [userProfile?.society_id]);
 
-  const handleMarkExit = async (visitorId) => {
+  const handleMarkExit = async (visitId) => {
     try {
-      await updateDoc(doc(db, 'visitors', visitorId), {
+      await updateDoc(doc(db, 'visits', visitId), {
         status: 'exited',
         exit_time: serverTimestamp(),
         updated_at: serverTimestamp(),
@@ -112,22 +112,22 @@ export default function GuardHomeScreen({ navigation }) {
       <TouchableOpacity
         style={styles.card}
         activeOpacity={0.85}
-        onPress={() => navigation.navigate('VisitorDetail', { visitorId: item.id })}
+        onPress={() => navigation.navigate('VisitorDetail', { visitId: item.id })}
       >
         <View style={styles.cardLeft}>
-          {item.image_url ? (
-            <Image source={{ uri: item.image_url }} style={styles.visitorPhoto} />
+          {item.visitor_image_url ? (
+            <Image source={{ uri: item.visitor_image_url }} style={styles.visitorPhoto} />
           ) : (
             <View style={styles.visitorPhotoPlaceholder}>
               <Text style={styles.visitorPhotoPlaceholderText}>
-                {item.name?.[0]?.toUpperCase() || '?'}
+                {item.visitor_name?.[0]?.toUpperCase() || '?'}
               </Text>
             </View>
           )}
         </View>
 
         <View style={styles.cardMiddle}>
-          <Text style={styles.visitorName} numberOfLines={1}>{item.name}</Text>
+          <Text style={styles.visitorName} numberOfLines={1}>{item.visitor_name}</Text>
           <Text style={styles.visitorMeta} numberOfLines={1}>
             {item.reason_for_visit}
           </Text>

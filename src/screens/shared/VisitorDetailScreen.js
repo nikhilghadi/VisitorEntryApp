@@ -30,7 +30,7 @@ const STATUS_CONFIG = {
 };
 
 export default function VisitorDetailScreen({ navigation, route }) {
-  const { visitorId, approvalRequired } = route.params;
+  const { visitId, approvalRequired } = route.params;
   const { userProfile } = useAuth();
 
   const role = userProfile?.role || 'guard';
@@ -47,7 +47,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      doc(db, 'visitors', visitorId),
+      doc(db, 'visits', visitId),
       async (snap) => {
         if (!snap.exists()) {
           Alert.alert('Not found', 'This visitor record no longer exists.');
@@ -75,7 +75,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
       }
     );
     return () => unsubscribe();
-  }, [visitorId]);
+  }, [visitId]);
 
   const getDocId = (field) => {
     if (!field) return null;
@@ -120,7 +120,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
   const handleMarkExit = () => {
     Alert.alert(
       'Mark as exited',
-      `Confirm that ${visitor?.name} has left the building?`,
+      `Confirm that ${visitor?.visitor_name} has left the building?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -128,7 +128,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
           onPress: async () => {
             try {
               setActionLoading(true);
-              await updateDoc(doc(db, 'visitors', visitorId), {
+              await updateDoc(doc(db, 'visits', visitId), {
                 status: 'exited',
                 exit_time: serverTimestamp(),
                 exit_guard_id: doc(db, 'users', userProfile?.id),
@@ -149,7 +149,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
   const handleApprove = () => {
     Alert.alert(
       'Approve visitor',
-      `Allow ${visitor?.name} to enter?`,
+      `Allow ${visitor?.visitor_name} to enter?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -157,7 +157,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
           onPress: async () => {
             try {
               setActionLoading(true);
-              await updateDoc(doc(db, 'visitors', visitorId), {
+              await updateDoc(doc(db, 'visits', visitId), {
                 status: 'approved',
                 approved_by: doc(db, 'users', userProfile?.id),
                 approved_at: serverTimestamp(),
@@ -177,7 +177,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
   const handleReject = () => {
     Alert.alert(
       'Reject visitor',
-      `Deny entry to ${visitor?.name}?`,
+      `Deny entry to ${visitor?.visitor_name}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -186,7 +186,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
           onPress: async () => {
             try {
               setActionLoading(true);
-              await updateDoc(doc(db, 'visitors', visitorId), {
+              await updateDoc(doc(db, 'visits', visitId), {
                 status: 'rejected',
                 rejected_by: doc(db, 'users', userProfile?.id),
                 rejected_at: serverTimestamp(),
@@ -276,21 +276,21 @@ export default function VisitorDetailScreen({ navigation, route }) {
 
         {/* hero card */}
         <View style={styles.heroCard}>
-          {visitor.image_url ? (
+          {visitor.visitor_image_url ? (
             <Image
-              source={{ uri: visitor.image_url }}
+              source={{ uri: visitor.visitor_image_url }}
               style={styles.visitorPhoto}
               resizeMode="cover"
             />
           ) : (
             <View style={[styles.visitorPhotoPlaceholder, { backgroundColor: theme.primaryLight }]}>
               <Text style={[styles.visitorPhotoInitial, { color: theme.primary }]}>
-                {visitor.name?.[0]?.toUpperCase() || '?'}
+                {visitor.visitor_name?.[0]?.toUpperCase() || '?'}
               </Text>
             </View>
           )}
           <View style={styles.heroInfo}>
-            <Text style={styles.visitorName}>{visitor.name}</Text>
+            <Text style={styles.visitorName}>{visitor.visitor_name}</Text>
             <Text style={styles.flatLabel}>Flat {flatInfo?.flat_number || '—'}</Text>
             <View style={[styles.statusPill, { backgroundColor: config.bg }]}>
               <View style={[styles.statusDot, { backgroundColor: config.dot }]} />

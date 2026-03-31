@@ -68,7 +68,7 @@ export default function ResidentHomeScreen({ navigation }) {
     const fromTimestamp = Timestamp.fromDate(todayStart);
 
     const visitorsQuery = query(
-      collection(db, 'visitors'),
+      collection(db, 'visits'),
       where('flat_id', '==', doc(db, 'flats', flatId)),
       where('created_at', '>=', fromTimestamp)
     );
@@ -105,7 +105,7 @@ export default function ResidentHomeScreen({ navigation }) {
           onPress: async () => {
             try {
               setActionLoading(visitorId);
-              await updateDoc(doc(db, 'visitors', visitorId), {
+              await updateDoc(doc(db, 'visits', visitorId), {
                 status: 'approved',
                 approved_by: doc(db, 'users', userProfile?.id),
                 approved_at: serverTimestamp(),
@@ -134,7 +134,7 @@ export default function ResidentHomeScreen({ navigation }) {
           onPress: async () => {
             try {
               setActionLoading(visitorId);
-              await updateDoc(doc(db, 'visitors', visitorId), {
+              await updateDoc(doc(db, 'visits', visitorId), {
                 status: 'rejected',
                 rejected_by: doc(db, 'users', userProfile?.id),
                 rejected_at: serverTimestamp(),
@@ -162,6 +162,7 @@ export default function ResidentHomeScreen({ navigation }) {
 
   const renderCard = ({ item }) => {
     const config = STATUS_CONFIG[item.status] || STATUS_CONFIG.pending;
+    console.log("resident item",item.status)
     const isPending = item.status === 'pending';
     const isActioning = actionLoading === item.id;
     const showApprovalButtons = approvalRequired && isPending;
@@ -172,7 +173,7 @@ export default function ResidentHomeScreen({ navigation }) {
         activeOpacity={0.85}
         onPress={() =>
           navigation.navigate('VisitorDetail', {
-            visitorId: item.id,
+            visitId: item.id,
             approvalRequired,
           })
         }
@@ -184,12 +185,12 @@ export default function ResidentHomeScreen({ navigation }) {
 
           {/* top row — photo + info */}
           <View style={styles.cardTop}>
-            {item.image_url ? (
-              <Image source={{ uri: item.image_url }} style={styles.photo} />
+            {item.visitor_image_url ? (
+              <Image source={{ uri: item.visitor_image_url }} style={styles.photo} />
             ) : (
               <View style={styles.photoPlaceholder}>
                 <Text style={styles.photoInitial}>
-                  {item.name?.[0]?.toUpperCase() || '?'}
+                  {item.visitor_name?.[0]?.toUpperCase() || '?'}
                 </Text>
               </View>
             )}
@@ -197,7 +198,7 @@ export default function ResidentHomeScreen({ navigation }) {
             <View style={styles.infoBlock}>
               <View style={styles.nameRow}>
                 <Text style={styles.visitorName} numberOfLines={1}>
-                  {item.name}
+                  {item.visitor_name}
                 </Text>
                 <Text style={styles.timeText}>{formatTime(item.in_time)}</Text>
               </View>
@@ -220,7 +221,7 @@ export default function ResidentHomeScreen({ navigation }) {
             <View style={styles.actionRow}>
               <TouchableOpacity
                 style={[styles.rejectButton, isActioning && styles.buttonDisabled]}
-                onPress={() => handleReject(item.id, item.name)}
+                onPress={() => handleReject(item.id, item.visitor_name)}
                 disabled={isActioning}
                 activeOpacity={0.8}
               >
@@ -233,7 +234,7 @@ export default function ResidentHomeScreen({ navigation }) {
 
               <TouchableOpacity
                 style={[styles.approveButton, isActioning && styles.buttonDisabled]}
-                onPress={() => handleApprove(item.id, item.name)}
+                onPress={() => handleApprove(item.id, item.visitor_name)}
                 disabled={isActioning}
                 activeOpacity={0.8}
               >
