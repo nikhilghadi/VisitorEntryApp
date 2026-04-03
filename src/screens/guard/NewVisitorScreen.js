@@ -15,6 +15,7 @@ import {
   Platform,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import {
   collection,
   addDoc,
@@ -33,7 +34,6 @@ import { useAuth } from '../../context/AuthContext';
 
 export default function NewVisitorScreen({ navigation }) {
   const { user, userProfile } = useAuth();
-
   // phone lookup state
   const [phone, setPhone] = useState('');
   const [phoneLookupDone, setPhoneLookupDone] = useState(false);
@@ -52,6 +52,7 @@ export default function NewVisitorScreen({ navigation }) {
   const [flats, setFlats] = useState([]);
   const [reasons, setReasons] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [societyLocation, setSocietyLocation] = useState(null);
 
   // UI state
   const [flatDropdownOpen, setFlatDropdownOpen] = useState(false);
@@ -198,6 +199,94 @@ export default function NewVisitorScreen({ navigation }) {
     }
   };
 
+  const getSocietyCoordinates = async () => {
+    if (societyLocation) return societyLocation;
+
+    if (!userProfile?.society_id) {
+      throw new Error('Society not found in profile');
+    }
+
+    const societyDoc = userProfile.society
+    if (!societyDoc) {
+      throw new Error('Society record not found');
+    }
+
+    const data = societyDoc
+    let latitude = null;
+    let longitude = null;
+
+    if (data.latitude != null && data.longitude != null) {
+      latitude = Number(data.latitude);
+      longitude = Number(data.longitude);
+    } else if (data.lat != null && data.lng != null) {
+      latitude = Number(data.lat);
+      longitude = Number(data.lng);
+    } else if (data.location?.latitude != null && data.location?.longitude != null) {
+      latitude = Number(data.location.latitude);
+      longitude = Number(data.location.longitude);
+    }
+
+    if (Number.isNaN(latitude) || Number.isNaN(longitude) || latitude == null || longitude == null) {
+      throw new Error('Society latitude/longitude not configured');
+    }
+
+    const coords = { latitude, longitude };
+    setSocietyLocation(coords);
+    return coords;
+  };
+
+  const getCurrentPosition = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Location permission required', 'Please allow location access to register a visitor.');
+      return null;
+    }
+
+    const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+    return location.coords;
+  };
+
+  const getDistanceMeters = (lat1, lon1, lat2, lon2) => {
+    const toRadians = (deg) => deg * (Math.PI / 180);
+    const R = 6371000;
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2
+      + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2))
+      * Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const isWithinGeofence = async () => {
+    try {
+      const societyCoords = await getSocietyCoordinates();
+      const userCoords = await getCurrentPosition();
+
+      if (!userCoords) return false;
+
+      const distance = getDistanceMeters(
+        societyCoords.latitude,
+        societyCoords.longitude,
+        userCoords.latitude,
+        userCoords.longitude
+      );
+      if (distance > (userProfile.society.geo_radius + 20)) {
+        Alert.alert(
+          'Outside society premises',
+          `You are ${Math.round(distance)} meters away from the society center. Please move closer (within ${userProfile.society.geo_radius}m) to register a visitor.`
+        );
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.log('Geofence check error:', error);
+      Alert.alert('Location error', error.message || 'Unable to validate location.');
+      return false;
+    }
+  };
+
   const resetPhoneSearch = () => {
     setPhone('');
     setPhoneLookupDone(false);
@@ -261,6 +350,16 @@ export default function NewVisitorScreen({ navigation }) {
   const handleSubmit = async () => {
     if (!validate()) return;
 
+    const allowed = await isWithinGeofence();
+    if (!allowed) {
+      
+      Alert.alert(
+        'Location error',
+        'You must be within the society premises to register a visitor.'
+      );
+
+      return
+    };
     try {
       setSubmitting(true);
 
@@ -354,7 +453,6 @@ export default function NewVisitorScreen({ navigation }) {
       </View>
     );
   }
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

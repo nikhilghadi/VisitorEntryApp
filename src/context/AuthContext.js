@@ -107,11 +107,32 @@ export function AuthProvider({ children }) {
           const flatDoc = await getDoc(doc(db, 'flats', profile.flat_id));
           if (flatDoc.exists()) {
             profile.flat_number = flatDoc.data().flat_number;
+            profile.flat = flatDoc.data();
           }
+          
         } catch (e) {
           console.log('Could not fetch flat details:', e);
           // non-critical — app still works without flat_number
         }
+      }
+      try {
+        const societyDoc = await getDoc(doc(db, 'societies', profile.society_id));
+        console.log('fetching society id',profile.society_id. societyDoc)
+        if (societyDoc.exists()) {
+          profile.society = societyDoc.data();
+        }else{
+          throw new Error('Society document does not exist');
+        }
+      } catch (e) {
+        //Critical error — society details are needed for app to function
+        console.log('Could not fetch society details:', e);
+        await fullSignOut();
+        Alert.alert(
+          'Error',
+          'Unable to load your society details. Please try again later.',
+          [{ text: 'OK' }]
+        );
+        return;
       }
 
       // update uid and timestamp on first login
