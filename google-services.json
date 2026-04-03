@@ -1,1 +1,39 @@
-
+{
+  "project_info": {
+    "project_number": "648081550109",
+    "project_id": "regentry-1db94",
+    "storage_bucket": "regentry-1db94.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648081550109:android:ffaa8090c7269c744a4ff4",
+        "android_client_info": {
+          "package_name": "com.regentry.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648081550109-uvqajimidvhr6v5f49lmkq3vftc5j1dg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVjk_KDiFkA4urjrQpS430giKnnBVa1WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648081550109-uvqajimidvhr6v5f49lmkq3vftc5j1dg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
