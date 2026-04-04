@@ -91,7 +91,7 @@ export default function NewVisitorScreen({ navigation }) {
         setReasons(reasonsSnap.docs[0].data().reasons || []);
       }
     } catch (error) {
-      console.log('Fetch dropdown data error:', error);
+      //console.log('Fetch dropdown data error:', error);
       Alert.alert('Error', 'Unable to load form data. Please try again.');
     } finally {
       setLoadingData(false);
@@ -151,7 +151,7 @@ export default function NewVisitorScreen({ navigation }) {
 
       setPhoneLookupDone(true);
     } catch (error) {
-      console.log('Phone lookup error:', error);
+      //console.log('Phone lookup error:', error);
       Alert.alert('Error', 'Unable to search visitor. Please try again.');
     } finally {
       setLookingUp(false);
@@ -195,7 +195,7 @@ export default function NewVisitorScreen({ navigation }) {
         if (matchingFlat) setSelectedFlat(matchingFlat);
       }
     } catch (e) {
-      console.log('Prefill last visit error:', e);
+      //console.log('Prefill last visit error:', e);
     }
   };
 
@@ -281,7 +281,7 @@ export default function NewVisitorScreen({ navigation }) {
 
       return true;
     } catch (error) {
-      console.log('Geofence check error:', error);
+      //console.log('Geofence check error:', error);
       Alert.alert('Location error', error.message || 'Unable to validate location.');
       return false;
     }
@@ -437,7 +437,7 @@ export default function NewVisitorScreen({ navigation }) {
         [{ text: 'OK', onPress: () => navigation.goBack() }]
       );
     } catch (error) {
-      console.log('Submit error:', error);
+      //console.log('Submit error:', error);
       Alert.alert('Error', 'Failed to register visitor. Please try again.');
     } finally {
       setSubmitting(false);

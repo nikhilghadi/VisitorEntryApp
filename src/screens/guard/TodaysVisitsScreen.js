@@ -51,7 +51,7 @@ export default function TodaysVisitsScreen({ navigation }) {
       where('society_id', '==', doc(db, 'societies', userProfile.society_id)),
       where('created_at', '>=', fromTimestamp)
     );
-    // console.log("Vists query",visitorsQuery)
+    // //console.log("Vists query",visitorsQuery)
     const unsubscribe = onSnapshot(
       visitorsQuery,
       (snapshot) => {
@@ -65,12 +65,12 @@ export default function TodaysVisitsScreen({ navigation }) {
 
         // sort by in_time descending — most recent first
         list.sort((a, b) => (b.in_time || 0) - (a.in_time || 0));
-        // console.log("All vis",list)
+        // //console.log("All vis",list)
         setVisitors(list);
         setLoading(false);
       },
       (error) => {
-        console.log('TodaysVisits error:', error);
+        //console.log('TodaysVisits error:', error);
         setLoading(false);
       }
     );

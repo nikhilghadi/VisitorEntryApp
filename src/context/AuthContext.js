@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
       // request permission
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== 'granted') {
-        console.log('Notification permission denied');
+        //console.log('Notification permission denied');
         return;
       }
 
@@ -67,11 +67,11 @@ export function AuthProvider({ children }) {
       const fcmToken = tokenData.data;
       
       if (fcmToken) {
-        console.log('FCM token returned and saved:', fcmToken);
+        //console.log('FCM token returned and saved:', fcmToken);
         return fcmToken;
       }
     } catch (e) {
-      console.log('Save FCM token error:', e);
+      //console.log('Save FCM token error:', e);
     }
   };
 
@@ -83,7 +83,7 @@ export function AuthProvider({ children }) {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
     } catch (e) {
-      console.log('Full sign out error:', e);
+      //console.log('Full sign out error:', e);
     }
     setUser(null);
     setUserProfile(null);
@@ -129,7 +129,7 @@ export function AuthProvider({ children }) {
       // if resident — fetch flat number in same login flow
       if (profile.role === 'resident' && profile.flat_id) {
         try {
-          console.log('fetching flat id',profile.flat_id)
+          //console.log('fetching flat id',profile.flat_id)
           const flatDoc = await getDoc(doc(db, 'flats', profile.flat_id));
           if (flatDoc.exists()) {
             profile.flat_number = flatDoc.data().flat_number;
@@ -137,13 +137,13 @@ export function AuthProvider({ children }) {
           }
           
         } catch (e) {
-          console.log('Could not fetch flat details:', e);
+          //console.log('Could not fetch flat details:', e);
           // non-critical — app still works without flat_number
         }
       }
       try {
         const societyDoc = await getDoc(doc(db, 'societies', profile.society_id));
-        console.log('fetching society id',profile.society_id. societyDoc)
+        //console.log('fetching society id',profile.society_id. societyDoc)
         if (societyDoc.exists()) {
           profile.society = societyDoc.data();
         }else{
@@ -151,7 +151,7 @@ export function AuthProvider({ children }) {
         }
       } catch (e) {
         //Critical error — society details are needed for app to function
-        console.log('Could not fetch society details:', e);
+        //console.log('Could not fetch society details:', e);
         await fullSignOut();
         Alert.alert(
           'Error',
@@ -174,7 +174,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
       setAuthLoading(false);
     } catch (error) {
-      console.log('Load profile error:', error);
+      //console.log('Load profile error:', error);
       await fullSignOut();
       Alert.alert('Error', 'Unable to load your profile. Please try again.');
     }
@@ -213,7 +213,7 @@ export function AuthProvider({ children }) {
           'Google Play Services is not available on this device.'
         );
       } else {
-        console.log('Google sign in error:', error);
+        //console.log('Google sign in error:', error);
         Alert.alert('Sign in failed', 'Unable to sign in with Google. Please try again.');
       }
     }
@@ -223,7 +223,7 @@ export function AuthProvider({ children }) {
     try {
       await fullSignOut();
     } catch (error) {
-      console.log('Logout error:', error);
+      //console.log('Logout error:', error);
       Alert.alert('Error', 'Unable to sign out. Please try again.');
     }
   };

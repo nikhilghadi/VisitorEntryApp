@@ -70,7 +70,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
         setLoading(false);
       },
       (error) => {
-        console.log('Visitor detail error:', error);
+        //console.log('Visitor detail error:', error);
         setLoading(false);
       }
     );
@@ -95,7 +95,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
         else setExitGuard(data);
       }
     } catch (e) {
-      console.log('Fetch guard error:', e);
+      //console.log('Fetch guard error:', e);
     }
   };
 
@@ -112,7 +112,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
       const flatDoc = await getDoc(doc(db, 'flats', flatId));
       if (flatDoc.exists()) setFlatInfo({ id: flatDoc.id, ...flatDoc.data() });
     } catch (e) {
-      console.log('Fetch flat error:', e);
+      //console.log('Fetch flat error:', e);
     }
   };
 

@@ -55,7 +55,7 @@ export default function GuardHomeScreen({ navigation }) {
         setRefreshing(false);
       },
       (error) => {
-        console.log('Visitors listener error:', error);
+        //console.log('Visitors listener error:', error);
         setLoading(false);
         setRefreshing(false);
       }
@@ -78,7 +78,7 @@ export default function GuardHomeScreen({ navigation }) {
         [{ text: 'OK' }]
       );
     } catch (error) {
-      console.log('Mark exit error:', error);
+      //console.log('Mark exit error:', error);
     }
   };
 

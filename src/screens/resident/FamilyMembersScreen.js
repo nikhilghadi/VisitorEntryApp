@@ -64,7 +64,7 @@ export default function FamilyMembersScreen({ navigation }) {
       });
       setMembers(list);
     } catch (e) {
-      console.log('Fetch members error:', e);
+      //console.log('Fetch members error:', e);
       Alert.alert('Error', 'Could not load family members.');
     } finally {
       setLoading(false);
@@ -383,7 +383,7 @@ function AddMemberModal({ visible, onClose, onAdded, userProfile, existingEmails
               onAdded();
               reset();
             } catch (e) {
-              console.log('Add member error:', e);
+              //console.log('Add member error:', e);
               Alert.alert('Error', 'Could not add member. Please try again.');
               setSubmitting(false);
             }

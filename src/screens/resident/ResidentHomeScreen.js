@@ -57,7 +57,7 @@ export default function ResidentHomeScreen({ navigation }) {
         setApprovalRequired(flatDoc.data().approval_required || false);
       }
     } catch (e) {
-      console.log('Fetch flat settings error:', e);
+      //console.log('Fetch flat settings error:', e);
     }
   };
 
@@ -88,7 +88,7 @@ export default function ResidentHomeScreen({ navigation }) {
         setLoading(false);
       },
       (error) => {
-        console.log('Residents visitors error:', error);
+        //console.log('Residents visitors error:', error);
         setLoading(false);
       }
     );
@@ -162,7 +162,7 @@ export default function ResidentHomeScreen({ navigation }) {
 
   const renderCard = ({ item }) => {
     const config = STATUS_CONFIG[item.status] || STATUS_CONFIG.pending;
-    console.log("resident item",item.status)
+    //console.log("resident item",item.status)
     const isPending = item.status === 'pending';
     const isActioning = actionLoading === item.id;
     const showApprovalButtons = approvalRequired && isPending;

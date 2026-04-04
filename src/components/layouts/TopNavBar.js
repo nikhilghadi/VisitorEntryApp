@@ -12,7 +12,7 @@ import { ROLE_THEMES } from '../../constants/themes';
 
 export default function TopNavBar({ title, onMenuPress }) {
   const { userProfile, user } = useAuth();
-  console.log('Top Nav ', user?.photoURL)
+  //console.log('Top Nav ', user?.photoURL)
   const role = userProfile?.role || 'guard';
   const theme = ROLE_THEMES[role];
 

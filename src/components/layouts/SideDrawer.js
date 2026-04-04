@@ -72,7 +72,7 @@ export default function SideDrawer({ isOpen, onClose, currentScreen, onNavigate 
   };
 
   if (!isOpen) return null;
-  console.log("Side Drawer user", userProfile)
+  //console.log("Side Drawer user", userProfile)
   return (
     <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
       {/* backdrop */}

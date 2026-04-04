@@ -61,7 +61,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
         setLoading(false);
       },
       (error) => {
-        console.log('Visitor detail error:', error);
+        //console.log('Visitor detail error:', error);
         setLoading(false);
       }
     );
@@ -87,7 +87,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
         else setExitGuard(guardData);
       }
     } catch (e) {
-      console.log('Fetch guard error:', e);
+      //console.log('Fetch guard error:', e);
     }
   };
 
@@ -110,7 +110,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
         setFlatInfo({ id: flatDoc.id, ...flatDoc.data() });
       }
     } catch (e) {
-      console.log('Fetch flat error:', e);
+      //console.log('Fetch flat error:', e);
     }
   };
 
@@ -133,7 +133,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
                 updated_at: serverTimestamp(),
               });
             } catch (error) {
-              console.log('Mark exit error:', error);
+              //console.log('Mark exit error:', error);
               Alert.alert('Error', 'Could not mark exit. Please try again.');
             } finally {
               setMarkingExit(false);

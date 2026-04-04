@@ -100,7 +100,7 @@ export default function PastVisitsScreen({ navigation }) {
       list.sort((a, b) => (b.in_time || 0) - (a.in_time || 0));
       setMonthData(list);
     } catch (error) {
-      console.log('Fetch past visits error:', error);
+      //console.log('Fetch past visits error:', error);
     } finally {
       setLoading(false);
     }

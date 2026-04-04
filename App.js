@@ -21,7 +21,7 @@ export default function App() {
         if (data?.visitId) {
           // navigation happens here — we'll wire this up
           // when we add deep linking in a later phase
-          console.log('Notification tapped for visit:', data.visitId);
+          //console.log('Notification tapped for visit:', data.visitId);
         }
       }
     );

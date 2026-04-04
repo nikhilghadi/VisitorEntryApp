@@ -26,7 +26,7 @@ exports.onNewVisitCreated = onDocumentCreated(
       const flatId = flatRef?.id || flatRef;
 
       if (!flatId) {
-        console.log('No flat_id on visit — skipping notification');
+        //console.log('No flat_id on visit — skipping notification');
         return;
       }
 
@@ -45,7 +45,7 @@ exports.onNewVisitCreated = onDocumentCreated(
         .get();
 
       if (residentsSnap.empty) {
-        console.log(`No active residents for flat ${flatId}`);
+        //console.log(`No active residents for flat ${flatId}`);
         return;
       }
 
@@ -53,14 +53,14 @@ exports.onNewVisitCreated = onDocumentCreated(
       const tokenDocs = [];
       residentsSnap.forEach((doc) => {
         const token = doc.data().fcm_token;
-        console.log(`Resident ${doc.id}  ${doc.data().name} token:`, token);
+        //console.log(`Resident ${doc.id}  ${doc.data().name} token:`, token);
         if (token && token !== '' && token !== 'null') {
           tokenDocs.push({ docId: doc.id, token });
         }
       });
-      console.log(tokenDocs)
+      //console.log(tokenDocs)
       if (tokenDocs.length === 0) {
-        console.log('No FCM tokens found');
+        //console.log('No FCM tokens found');
         return;
       }
 
@@ -130,7 +130,7 @@ exports.onNewVisitCreated = onDocumentCreated(
 
       if (updates.length) await Promise.all(updates);
 
-      console.log(`Sent ${results.filter((r) => r.success).length}/${tokenDocs.length}`);
+      //console.log(`Sent ${results.filter((r) => r.success).length}/${tokenDocs.length}`);
     } catch (error) {
       console.error('onNewVisitCreated error:', error);
     }
@@ -195,7 +195,7 @@ exports.onVisitStatusChanged = onDocumentUpdated(
         },
       });
 
-      console.log(`Guard notified for visit ${visitId}`);
+      //console.log(`Guard notified for visit ${visitId}`);
     } catch (error) {
       console.error('onVisitStatusChanged error:', error);
     }
