@@ -21,6 +21,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
+import * as Notifications from 'expo-notifications';
 
 const AuthContext = createContext({});
 
@@ -48,6 +49,31 @@ export function AuthProvider({ children }) {
     });
     return unsubscribe;
   }, []);
+
+
+  const saveFcmToken = async (userDocId) => {
+    try {
+      // request permission
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Notification permission denied');
+        return;
+      }
+
+      // get FCM token
+      const tokenData = await Notifications.getDevicePushTokenAsync();
+
+
+      const fcmToken = tokenData.data;
+      
+      if (fcmToken) {
+        console.log('FCM token returned and saved:', fcmToken);
+        return fcmToken;
+      }
+    } catch (e) {
+      console.log('Save FCM token error:', e);
+    }
+  };
 
   // full sign out from both Firebase and Google
   // so user can pick a different account next time
@@ -134,10 +160,12 @@ export function AuthProvider({ children }) {
         );
         return;
       }
+      const fcmToken = await saveFcmToken(userDoc.id);
 
       // update uid and timestamp on first login
       await updateDoc(doc(db, 'users', userDoc.id), {
         uid: firebaseUser.uid,
+        fcm_token: fcmToken || null,
         updated_at: serverTimestamp(),
       });
 
