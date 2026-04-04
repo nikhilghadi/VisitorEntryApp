@@ -20,6 +20,7 @@ import {
 import { db } from '../../config/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { ROLE_THEMES } from '../../constants/themes';
+import FullScreenImage from './FullScreenImage';
 
 const STATUS_CONFIG = {
   pending:  { label: 'Awaiting approval', bg: '#FAEEDA', text: '#854F0B', dot: '#BA7517' },
@@ -44,6 +45,7 @@ export default function VisitorDetailScreen({ navigation, route }) {
   const [flatInfo, setFlatInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [fullScreenPhoto, setFullScreenPhoto] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -277,11 +279,19 @@ export default function VisitorDetailScreen({ navigation, route }) {
         {/* hero card */}
         <View style={styles.heroCard}>
           {visitor.visitor_image_url ? (
-            <Image
-              source={{ uri: visitor.visitor_image_url }}
-              style={styles.visitorPhoto}
-              resizeMode="cover"
-            />
+            <TouchableOpacity
+              onPress={() => setFullScreenPhoto(true)}
+              activeOpacity={0.9}
+            >
+              <Image
+                source={{ uri: visitor.visitor_image_url }}
+                style={styles.visitorPhoto}
+                resizeMode="cover"
+              />
+              <View style={styles.tapToExpandHint}>
+                <Text style={styles.tapToExpandText}>Tap to expand</Text>
+              </View>
+            </TouchableOpacity>
           ) : (
             <View style={[styles.visitorPhotoPlaceholder, { backgroundColor: theme.primaryLight }]}>
               <Text style={[styles.visitorPhotoInitial, { color: theme.primary }]}>
@@ -426,6 +436,12 @@ export default function VisitorDetailScreen({ navigation, route }) {
 
         <View style={{ height: 40 }} />
       </ScrollView>
+
+      <FullScreenImage
+        visible={fullScreenPhoto}
+        imageUrl={visitor.visitor_image_url}
+        onClose={() => setFullScreenPhoto(false)}
+      />
     </View>
   );
 }
@@ -569,4 +585,20 @@ const styles = StyleSheet.create({
   },
   exitButtonRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   exitButtonText: { fontSize: 16, fontWeight: '600', color: '#ffffff', letterSpacing: 0.2 },
+    tapToExpandHint: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    paddingVertical: 4,
+    alignItems: 'center',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  tapToExpandText: {
+    fontSize: 11,
+    color: '#ffffff',
+    fontWeight: '500',
+  },
 });
