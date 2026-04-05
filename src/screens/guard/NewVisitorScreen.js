@@ -42,6 +42,7 @@ export default function NewVisitorScreen({ navigation }) {
 
   // form fields
   const [visitorName, setVisitorName] = useState('');
+  const [visitorAddress, setVisitorAddress] = useState('');
   const [selectedFlat, setSelectedFlat] = useState(null);
   const [selectedReason, setSelectedReason] = useState(null);
   const [comment, setComment] = useState('');
@@ -121,7 +122,7 @@ export default function NewVisitorScreen({ navigation }) {
 
         setExistingVisitor(visitorData);
         setVisitorName(visitorData.name || '');
-
+        setVisitorAddress(visitorData.address || '');
         // check photo staleness
         const photoTakenAt = visitorData.photo_taken_at?.toDate?.();
         const isStale = isPhotoStale(photoTakenAt);
@@ -142,6 +143,7 @@ export default function NewVisitorScreen({ navigation }) {
         // new visitor — blank form
         setExistingVisitor(null);
         setVisitorName('');
+        setVisitorAddress('');
         setSelectedFlat(null);
         setSelectedReason(null);
         setPhoto(null);
@@ -292,6 +294,7 @@ export default function NewVisitorScreen({ navigation }) {
     setPhoneLookupDone(false);
     setExistingVisitor(null);
     setVisitorName('');
+    setVisitorAddress('');
     setSelectedFlat(null);
     setSelectedReason(null);
     setPhoto(null);
@@ -329,6 +332,7 @@ export default function NewVisitorScreen({ navigation }) {
   const validate = () => {
     const newErrors = {};
     if (!visitorName.trim()) newErrors.name = 'Visitor name is required';
+    if (!visitorAddress.trim()) newErrors.address = 'Visitor address is required';
     if (!selectedFlat) newErrors.flat = 'Please select a flat';
     if (!selectedReason) newErrors.reason = 'Please select a reason';
     if (!photo) newErrors.photo = 'Visitor photo is mandatory';
@@ -385,6 +389,7 @@ export default function NewVisitorScreen({ navigation }) {
           updateData.image_url = finalImageUrl;
           updateData.photo_taken_at = serverTimestamp();
           updateData.name = visitorName.trim(); // update name if changed
+          updateData.address = visitorAddress.trim(); // update address if changed
         }
 
         await updateDoc(doc(db, 'visitors', visitorId), updateData);
@@ -392,6 +397,7 @@ export default function NewVisitorScreen({ navigation }) {
         // new visitor — create master record
         const newVisitorRef = await addDoc(collection(db, 'visitors'), {
           name: visitorName.trim(),
+          address: visitorAddress.trim(),
           phone: phone.trim(),
           image_url: finalImageUrl,
           photo_taken_at: serverTimestamp(),
@@ -408,6 +414,7 @@ export default function NewVisitorScreen({ navigation }) {
       await addDoc(collection(db, 'visits'), {
         visitor_id: doc(db, 'visitors', visitorId),
         visitor_name: visitorName.trim(),       // denormalized
+        visitor_address: visitorAddress.trim(), // denormalized
         visitor_phone: phone.trim(),            // denormalized
         visitor_image_url: finalImageUrl,       // denormalized
         flat_id: doc(db, 'flats', selectedFlat.id),
@@ -573,6 +580,25 @@ export default function NewVisitorScreen({ navigation }) {
                   returnKeyType="done"
                 />
                 {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+              </View>
+
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>
+                  Visitor Address <Text style={styles.required}>*</Text>
+                </Text>
+                <TextInput
+                  style={[styles.textInput, errors.address && styles.inputError]}
+                  placeholder="Enter full address"
+                  placeholderTextColor="#B4B2A9"
+                  value={visitorAddress}
+                  onChangeText={(t) => {
+                    setVisitorAddress(t);
+                    if (errors.address) setErrors((p) => ({ ...p, address: null }));
+                  }}
+                  autoCapitalize="words"
+                  returnKeyType="done"
+                />
+                {errors.address && <Text style={styles.errorText}>{errors.address}</Text>}
               </View>
 
               {/* flat dropdown */}

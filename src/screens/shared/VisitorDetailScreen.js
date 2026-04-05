@@ -302,10 +302,31 @@ export default function VisitorDetailScreen({ navigation, route }) {
           )}
           <View style={styles.heroInfo}>
             <Text style={styles.visitorName}>{visitor.visitor_name}</Text>
-            <Text style={styles.flatLabel}>Flat {flatInfo?.flat_number || '—'}</Text>
+
+            {/* flat number pill */}
+            <View style={[styles.flatPill,{ backgroundColor: theme.primaryLight }]}>
+              <Text style={styles.flatPillIcon}>🏠</Text>
+              <Text style={styles.flatPillText}>
+                Flat {flatInfo?.flat_number || '—'}
+              </Text>
+            </View>
+
+            {/* address — only show if present */}
+            {visitor.visitor_address ? (
+              <View style={styles.addressRow}>
+                <Text style={styles.addressIcon}>📍</Text>
+                <Text style={styles.addressText} numberOfLines={2}>
+                  {visitor.visitor_address}
+                </Text>
+              </View>
+            ) : null}
+
+            {/* status pill */}
             <View style={[styles.statusPill, { backgroundColor: config.bg }]}>
               <View style={[styles.statusDot, { backgroundColor: config.dot }]} />
-              <Text style={[styles.statusText, { color: config.text }]}>{config.label}</Text>
+              <Text style={[styles.statusText, { color: config.text }]}>
+                {config.label}
+              </Text>
             </View>
           </View>
         </View>
@@ -504,6 +525,38 @@ function GuardCard({ guard, time, formatDateTime, actionLabel, color, lightColor
 }
 
 const styles = StyleSheet.create({
+  flatPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-start',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  flatPillText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  flatPillIcon: {
+    fontSize: 11,
+  },
+  addressRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 5,
+    paddingRight: 8,
+  },
+  addressIcon: {
+    fontSize: 11,
+    marginTop: 2,
+  },
+  addressText: {
+    fontSize: 12,
+    color: '#888780',
+    flex: 1,
+    lineHeight: 17,
+  },
   callSection: {
     backgroundColor: '#ffffff',
     borderRadius: 14,
