@@ -21,6 +21,7 @@ import { db } from '../../config/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { ROLE_THEMES } from '../../constants/themes';
 import FullScreenImage from './FullScreenImage';
+import { handleCall } from '../../utils/callerFunction';
 
 const STATUS_CONFIG = {
   pending:  { label: 'Awaiting approval', bg: '#FAEEDA', text: '#854F0B', dot: '#BA7517' },
@@ -434,6 +435,31 @@ export default function VisitorDetailScreen({ navigation, route }) {
           </TouchableOpacity>
         )}
 
+        { (role === 'guard' || role === 'resident') && (['approved', 'pending'].includes(visitor.status)) &&
+        
+          <View style={styles.callSection}>
+            <View style={styles.callSectionLeft}>
+              <Text style={styles.callSectionTitle}>
+                {isResident ? 'Contact guard' : 'Contact flat owner'}
+              </Text>
+              <Text style={styles.callSectionSubtitle}>
+                {isResident
+                  ? 'Call the guard who registered this entry'
+                  : 'Call the owner to follow up on approval'}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.callButton}
+              onPress={() => handleCall(visitor)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.callButtonIcon}>📞</Text>
+              <Text style={styles.callButtonText}>Call</Text>
+            </TouchableOpacity>
+          </View>
+        }
+
         <View style={{ height: 40 }} />
       </ScrollView>
 
@@ -478,6 +504,48 @@ function GuardCard({ guard, time, formatDateTime, actionLabel, color, lightColor
 }
 
 const styles = StyleSheet.create({
+  callSection: {
+    backgroundColor: '#ffffff',
+    borderRadius: 14,
+    padding: 16,
+    borderWidth: 0.5,
+    borderColor: '#D3D1C7',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  callSectionLeft: {
+    flex: 1,
+    gap: 3,
+  },
+  callSectionTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#444441',
+  },
+  callSectionSubtitle: {
+    fontSize: 12,
+    color: '#888780',
+  },
+  callButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#E1F5EE',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderWidth: 0.5,
+    borderColor: '#9FE1CB',
+  },
+  callButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#0F6E56',
+  },
+  callButtonIcon: {
+    fontSize: 16,
+  },
   container: { flex: 1, backgroundColor: '#F1EFE8' },
   loadingContainer: {
     flex: 1, justifyContent: 'center',

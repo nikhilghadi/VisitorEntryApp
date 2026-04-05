@@ -11,7 +11,10 @@
     ],
     "android": {
       "package": "com.regentry.app",
-      "googleServicesFile": "./google-services.json"
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
+      "enableProguardInReleaseBuilds": true,
+      "enableShrinkResourcesInReleaseBuilds": true
     },
     "ios": {
       "bundleIdentifier": "com.regentry.app",

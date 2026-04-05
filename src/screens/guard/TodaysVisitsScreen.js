@@ -47,11 +47,11 @@ export default function TodaysVisitsScreen({ navigation }) {
     const fromTimestamp = Timestamp.fromDate(twoDaysAgo);
 
     const visitorsQuery = query(
-      collection(db, 'visitors'),
-      where('society_id', '==', doc(db, 'societies', userProfile.society_id)),
+      collection(db, 'visits'),
+      where('society_id', '==',doc(db, 'societies', userProfile.society_id)),
       where('created_at', '>=', fromTimestamp)
     );
-    // //console.log("Vists query",visitorsQuery)
+    console.log("Vists query", fromTimestamp,  userProfile.society_id)
     const unsubscribe = onSnapshot(
       visitorsQuery,
       (snapshot) => {
@@ -171,14 +171,14 @@ export default function TodaysVisitsScreen({ navigation }) {
       <TouchableOpacity
         style={styles.card}
         activeOpacity={0.85}
-        onPress={() => navigation.navigate('VisitorDetail', { visitorId: item.id })}
+        onPress={() => navigation.navigate('VisitorDetail', { visitId: item.id })}
       >
         {/* left color bar */}
         <View style={[styles.colorBar, { backgroundColor: config.dot }]} />
 
         <View style={styles.cardBody}>
           <View style={styles.cardTop}>
-            <Text style={styles.visitorName} numberOfLines={1}>{item.name}</Text>
+            <Text style={styles.visitorName} numberOfLines={1}>{item.visitor_name}</Text>
             <Text style={styles.timeText}>{formatTime(item.in_time)}</Text>
           </View>
 

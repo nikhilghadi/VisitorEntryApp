@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -22,7 +22,7 @@ import {
 import { db } from '../../config/firebase';
 import { useAuth } from '../../context/AuthContext';
 import AppLayout from '../../components/layouts/AppLayout';
-
+import { handleCall } from '../../utils/callerFunction';
 export default function GuardHomeScreen({ navigation }) {
   const { userProfile } = useAuth();
   const [visitors, setVisitors] = useState([]);
@@ -138,20 +138,28 @@ export default function GuardHomeScreen({ navigation }) {
             </Text>
           </View>
         </View>
-
-        {item.status === 'active' || item.status === 'approved' ? (
+        <View style={styles.cardActions}>
+          {item.status === 'active' || item.status === 'approved' ? (
+            <TouchableOpacity
+              style={styles.exitButton}
+              onPress={() => handleMarkExit(item.id)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.exitButtonText}>Mark as {'\n'}exit</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={styles.cardRight}>
+              <Text style={styles.pendingIcon}>⏳</Text>
+            </View>
+          )}
           <TouchableOpacity
-            style={styles.exitButton}
-            onPress={() => handleMarkExit(item.id)}
+            style={styles.callButton}
+            onPress={() => handleCall(item)}
             activeOpacity={0.8}
           >
-            <Text style={styles.exitButtonText}>Mark as {'\n'}exit</Text>
+            <Text style={styles.callButtonIcon}>📞</Text>
           </TouchableOpacity>
-        ) : (
-          <View style={styles.cardRight}>
-            <Text style={styles.pendingIcon}>⏳</Text>
-          </View>
-        )}
+        </View>
       </TouchableOpacity>
     );
   };
@@ -224,6 +232,24 @@ export default function GuardHomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  cardActions: {
+  flexShrink: 0,
+  alignItems: 'center',
+  gap: 8,
+  },
+  callButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#E1F5EE',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 0.5,
+    borderColor: '#9FE1CB',
+  },
+  callButtonIcon: {
+    fontSize: 16,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F1EFE8',
